@@ -1,0 +1,44 @@
+<html>	
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript">
+		
+		</script>
+		
+		<style>
+			
+			.surround{
+				width:528px;
+				height:600px;
+				background-color:#BACF84;
+				margin-left:35%;
+				padding:10px;
+			}
+			.product{
+				width:244px;
+				height:190px;
+				background:white;
+				float:left;
+				margin:5px;
+				padding:2px;
+			}		
+		</style>
+	</head>
+	<body>
+		
+			
+		
+			<div class="surround">
+			
+				<div class="product"><a href="/alading/product/view/1"><img src="/alading/images/pro.png"/></a></div>
+				<div class="product"><a href="/alading/product/view/2"><img src="/alading/images/pro.png"/></a></div>
+				<div class="product"><a href="/alading/product/view/3"><img src="/alading/images/pro.png"/></a></div>
+				<div class="product"><a href="/alading/product/view/4"><img src="/alading/images/pro.png"/></a></div>
+			
+			</div>
+				
+		
+				
+		
+	</body>
+</html>

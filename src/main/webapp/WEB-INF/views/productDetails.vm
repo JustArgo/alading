@@ -1,0 +1,111 @@
+<html>
+
+	<head>
+		
+		<meta charset="utf-8">
+		<style>
+		
+			.surround{
+				position:relative;
+				width:528px;
+				height:600px;
+				background-color:#BACF84;
+				margin-left:35%;
+				padding:10px;
+			}
+			.carousel{
+				position:absolute:
+				width:400px;
+				height:179px;
+				margin:0 0;
+				left:0;
+				right:0;
+				top:0;
+				bottom:0;
+				background-color:white;
+			}
+			.pDetail{
+				margin-top:5px;
+				height:55px;
+				padding-top:10px;
+				background-color:white;
+				border:1px solid black;
+			}
+			.comi{
+				padding-top:5px;
+			}
+			.pParameter{
+				width:margin-top:5px;
+				height:45px;
+				margin-top:5px;
+				padding-top:10px;
+				background-color:white;
+				border:1px solid black;
+				text-align:center;
+			}
+			.paraInner{
+				line-height:40px;
+			}
+			.evaluate{
+				width:margin-top:5px;
+				height:95px;
+				margin-top:5px;
+				padding:8px;
+				background-color:white;
+				border:1px solid black;
+			}
+			.goodEva{
+				float:right;
+			}
+			.bot{
+				width:margin-top:5px;
+				height:48px;
+				margin-top:5px;
+				padding:8px;
+				background-color:white;
+				border:1px solid black;
+			}	
+		</style>
+		
+	
+	</head>
+	
+	<body>
+		
+		
+		
+		<div class="surround">
+			<div class="carousel">
+				
+			</div>
+			
+			<div class="pDetail">
+				产品名称:${product.name}<br/>
+				价格:${product.price}<br/>
+			</div>
+			
+			<div class="comi">
+				运费详情　　商品所在地<p/>
+				返佣说明<p/>
+				分销说明 eg: 一键分销，零成本开店，有15847在卖
+			</div>
+			
+			<div class="pParameter">
+				<span class="paraInner">商品参数<span>
+			</div>
+			
+			<div class="evaluate">
+				商品评价 <span class="goodEva">100%</span><p/>
+				<img src="/alading/images/icon.png"/>用户名称
+			</div>
+			<div class="bot">
+				<a href=""><span class="addToCart">加入购物车</span></a>
+				<a href="/alading/product/buyNow/${product.id}"><span class="buyNow">直接购买</span></a>
+			</div>
+		</div>
+		
+		
+		
+	</body>
+	
+</html>

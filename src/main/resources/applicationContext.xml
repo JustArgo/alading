@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+				        http://www.springframework.org/schema/beans/spring-beans.xsd
+				        http://code.alibabatech.com/schema/dubbo
+				        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+				        http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+						http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">     
+
+	
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="aladingclient" /> 
+	<dubbo:registry  protocol="zookeeper"  address="zookeeper://127.0.0.1:2181" />         
+	
+	<dubbo:reference id="orderDetailService" interface="com.mor.maven.dubboserver.service.IOrderDetailService"/>
+	
+	<!-- dataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/alading"/>
+		<property name="username" value="root"/>
+		<property name="password" value="123456"/>
+	</bean>
+	
+	
+	<!-- mybatis配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 配置对应的数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 配置别名路径 -->
+		<property name="typeAliasesPackage" value="com.argo.alading.domain"/>
+		<!-- 配置mapper.xml所在包 -->
+		<property name="mapperLocations" value="classpath*:com/argo/alading/mapper/*Mapper.xml"/>
+		<!-- 配置mybatis-config.xml 所在的路径 -->
+		<property name="configLocation" value=""/>
+	</bean>
+	
+	<!-- mybatis mapper接口 所在的包 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.argo.alading.mapper"/>
+	</bean>
+	
+	 <bean id="conversionService"
+        class="org.springframework.format.support.FormattingConversionServiceFactoryBean">        
+     </bean>
+	
+	<mvc:annotation-driven conversion-service="conversionService" />
+
+	<mvc:default-servlet-handler />
+
+	<context:component-scan base-package="com.argo.alading"/>
+	
+	<!-- 这里要用velocity的Resolver -->
+	<bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="cache" value="true" />
+		<property name="suffix" value=".vm"/>
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+	</bean>
+	
+	<!-- 配置velocity引擎 -->
+	<bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">  
+        <property name="resourceLoaderPath" value="/WEB-INF/views/" /><!-- 模板存放的路径 -->  
+        <property name="configLocation" value="classpath:velocity.properties" />  
+    </bean>  
+    
+    
+    
+	
+	
+	
+	
+	
+</beans>

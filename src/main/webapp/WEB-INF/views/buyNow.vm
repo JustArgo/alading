@@ -1,0 +1,300 @@
+<html>
+	<head>
+		
+		<meta charset="utf-8">
+		<script type="text/javascript" src="/alading/js/jquery-1.11.1.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+				//初始化页面邮费
+				$(".totalAmount").text(parseInt($(".totalAmount").text())+parseInt($(".postage").text()));
+				
+				//点击事件
+				$(".sub").click(function(){
+					var num = $("input[name=buyNum]").val();
+					var price = parseInt($(".productPrice").text());
+					var postage = parseInt($(".postage").text());
+					try{
+						num = parseInt(num);
+						if(isNaN(num)){
+							alert("请输入合法的数字");
+						}else{
+							if(num>=2){
+								$("input[name=buyNum]").val(num-1);
+								$(".totalNum").text(num-1);
+								$(".totalAmount").text(price*(num-1)+postage);
+							}else{
+								alert("1件起卖");
+							}
+						}
+					}catch(e){
+						alert("请输入合法的数字");
+					}
+				});
+				
+				$(".add").click(function(){
+				
+					var num = $("input[name=buyNum]").val();
+					var repertory = $(".repNum").text();
+					var price = parseInt($(".productPrice").text());
+					var postage = parseInt($(".postage").text());
+					
+					alert(price);
+					try{
+						num = parseInt(num);
+						if(isNaN(num)){
+							alert("请输入合法的数字");
+						}else{
+							if(num>=repertory){
+								alert("购买数量不能超出库存量");
+							}else{
+								$("input[name=buyNum]").val(num+1);
+								$(".totalNum").text(num+1);
+								$(".totalAmount").text(price*(num+1)+postage);
+							}
+						}
+					}catch(e){
+						alert("请输入合法的数字");
+					}
+					
+				
+				});
+				
+				
+				$(".wechat").click(function(){
+					alert("你选择用微信支付");					
+				});
+				
+				$(".alipay").click(function(){
+					alert("你选择用支付宝支付");					
+				});
+				
+				$(".paypal").click(function(){
+					
+					$(".realAmount").text($(".totalAmount").text());
+					$(".paypalPayType").show();
+					
+					/*
+					var id = $(".productId").text();
+					var totalNum = $(".totalNum").text();
+					location.href="/alading/product/calc?order.orderDetails[0].productId="+id+"&order.orderDetails[1].quantity="+totalNum;
+					*/
+				});
+				
+				$(".confirmBuy").click(function(){
+					var id = $(".productId").text();
+					var totalNum = $(".totalNum").text();
+					var useCurrency = $(".useCurrency").val();
+					location.href="/alading/product/calc?orderDetails[0].productId="+id+"&orderDetails[0].quantity="+totalNum+"&useCurrency="+useCurrency;
+				});
+				
+				//改变货币类型 
+				$("select[name=currency]").change(function(){
+					
+					//用户选择的货币类型
+					var currency = $(this).val();
+					
+					//当前货币类型下 应付金额
+					var currentAmount = $(".realAmount").text();
+					
+					//美金应付金额
+					var USDAmount = $(".totalAmount").text();
+					
+					if(currency!='USD'){
+						
+						$.ajax({
+							url:'/alading/product/exchange',
+							type:'POST',
+							data:{"amount":USDAmount,"currency":currency},
+							dataType:"json",
+							success:function(ret){
+								$(".realAmount").text(ret);
+							}
+						
+						});
+					}else{
+						$(".realAmount").text($(".totalAmount").text());
+					}
+					
+				
+				});
+				
+				
+			})
+		</script>
+		<style>
+
+			.surround{
+				position:relative;
+				width:528px;
+				height:600px;
+				background-color:#BACF84;
+				margin-left:35%;
+				padding:10px;
+			}
+			.panda{
+				margin-top:5px;
+				padding:5px;
+				background-color:white;
+			}
+			.recPhone{
+				float:right;
+			}
+			.buyProduct{
+				padding:10px;
+				margin-top:10px;
+				height:95px;
+				background-color:white;
+			}
+			.proPic{
+				float:left;
+			}
+			.proDet{
+				float:left;
+				width:300px;
+				margin-left:10px;
+				height:80px;
+				padding:10px;
+			}
+			.repNum{
+				float:right;
+			}
+			.buyNum{
+				margin-top:15px;
+			}
+			.bnum{
+				width:30px;
+				margin:7px;
+			}
+			.sub{
+				cursor:pointer;
+			}
+			.sub:active{
+				border:1px solid black;
+			}
+			.add{
+				cursor:pointer;
+			}
+			.add:active{
+				border:1px solid black;
+			}
+			.calcbNum{
+				float:right;
+			}
+			.post{
+				
+			}
+			.includePost{
+				float:right;
+			}
+			.amount{
+				text-align:right;
+			}
+			.payType{
+				position:relative;
+				margin-top:10px;
+				text-align:center;
+			}
+			.pType{
+				display:block;
+				background-color:white;
+				border:1px solid black;
+				width:197px;
+				height:40px;
+				margin-top:5px;
+				margin-left:28%;
+				line-height:40px;
+				cursor:pointer;
+			}
+			.pType:active{
+				border:1px solid gray;
+			}	
+			.paypalPayType{
+				position:absolute;
+				
+				margin:auto;
+				width:230px;
+				height:100px;
+				
+				left:0;
+				top:0;
+				right:0;
+				bottom:0;
+				
+				background-color:#C1DEE3;
+			}
+		</style>
+		
+	</head>
+	<body>
+		
+		<div class="surround">
+			
+			<div class="panda">
+				收件人: xxx   <span class="recPhone">18759963445</span><p/>
+				收货地址： 广州市天河区富力盈通大厦
+			</div>
+			
+			<div class="buyProduct">
+				<div class="proPic">
+					<img src="/alading/images/u18.png"/>
+				</div>
+				<div class="proDet">
+					<span style="display:none;" class="productId">${product.id}</span>
+					产品标题 &nbsp;&nbsp;<span class="productName">${product.name}</span>  <br/>
+					<br/><br/>
+					￥<span class="productPrice">${product.price}</span> <span class="repNum">${product.repertory}</span>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="buyNum">
+					购买数量：<div class="calcbNum"><img src="/alading/images/subtract.png" class="sub" width=16 height=16/><input type="text" name="buyNum" value="1" class="bnum"/><img src="/alading/images/add.png" class="add" width=16 height=16/></div>
+				</div>
+				<div style="clear:both"></div>
+				<hr/>
+				<div class="post">
+					运费 <font class="includePost">邮费：&nbsp;<span class="postage">${product.postage}</span></font>
+				</div>
+				<div style="clear:both"></div>
+				<hr/>
+				<div class="invoice">
+					<input type="checkbox" name="invoice">发票<br/>
+					<input type="text" name="invoicetitle" placeholder="请输入发票抬头"></br>
+					<select name="invoiceType">
+						<option>国家发票</option>
+						<option>小票</option>
+					</select>
+				</div>
+				<hr/>
+				<input type="text" name="note" placeholder="给卖家留言"/>
+				<hr/>
+				<div class="amount">
+					共<span class="totalNum">1</span>件商品　　合计：￥<span class="totalAmount">${product.price}</span>
+				</div>
+				<div class="payType">
+					支付方式<br/>
+					<span class="pType wechat">微信支付</span>
+					<span class="pType alipay">支付宝支付</span>
+					<span class="pType paypal">贝宝支付</span>
+					<span class="paypalPayType">
+						<select name="currency" class="useCurrency">
+							<option value="USD">USD(美金)</option>
+							<option value="AUD">AUD(澳元)</option>
+							<option value="BRL">BRL(巴西雷亚尔)</option>
+							<option value="GBP">GBP(英镑)</option>
+						</select>
+						<span class="realAmount"></span><br/><br/>
+						<a href="javascript:void(0);" class="confirmBuy">确定</a>
+					</span>
+				</div>
+				
+			</div>
+			
+			
+			
+			
+			
+			
+		</div>
+		
+	</body>
+</html>
